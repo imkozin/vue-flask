@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager, create_access_token
 from werkzeug.security import generate_password_hash, check_password_hash
-# migrate
+from flask_cors import CORS
 from flask_migrate import Migrate
 from sqlalchemy import text
 from dotenv import load_dotenv
@@ -14,6 +14,7 @@ load_dotenv()
 
 # create the app
 app = Flask(__name__)
+CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['JWT_SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
@@ -50,7 +51,7 @@ jwt = JWTManager(app)
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 
 @app.route('/admin/create', methods=['POST'])
-def create_admin_profile():
+def create_admin():
     data = request.get_json()
 
     login = data.get('login')
@@ -88,29 +89,47 @@ def admin_login():
     else:
         return jsonify({'error': 'Invalid login credentials'}), 401
 
-@app.route('/signup', methods=['POST'])
-def signup():
+@app.route('/user/register', methods=['POST'])
+def user_register():
     data = request.get_json()
-    user_exists = User.query.filter_by(email=data['email']).first()
+    fname = data.get('fname')
+    lname = data.get('lname')
+    city = data.get('city')
+    login = data.get('login')
+    password = data.get('password')
+    device_qty = data.get('device_qty')
+
+    if not fname or not lname or not city or not login or not password:
+        return jsonify({'error': 'All fields (fname, lname, city, login, password) are required'}), 400
+
+    user_exists = User.query.filter_by(login=data['login']).first()
 
     if user_exists:
-        return jsonify({"error": "Email is already registered"}), 400
+        return jsonify({'error': 'User with this login already exists'}), 400
 
-    if not re.fullmatch(regex, data['email']):
-        return jsonify({"error": "Invalid Email"}), 400
+    if not re.fullmatch(regex, data['login']):
+        return jsonify({"error": "Invalid Login"}), 400
     
     if len(data['password']) < 6:
         return jsonify({"error": "Invalid Password"}), 400
     
-    hashed_password = generate_password_hash(data['password'], method='sha256')
-    new_user = User(email=data['email'], password=hashed_password)
+    hash_password = generate_password_hash(password)
+    new_user = User(
+        fname=fname,
+        lname=lname,
+        city=city,
+        login=login,
+        password=hash_password,
+        device_qty=device_qty
+    )
     db.session.add(new_user)
     db.session.commit()
-    return jsonify({"message": "User registered successfully"}), 200
-    
 
-@app.route('/signin', methods=['POST'])
-def signin():
+    return jsonify({"message": "User registered successfully"}), 200
+
+
+@app.route('/user/login', methods=['POST'])
+def user_login():
     data = request.get_json()
     user = User.query.filter_by(email=data['email']).first() 
     print("Req data =>", data)
@@ -125,6 +144,28 @@ def signin():
     email = user.email
     return jsonify({"email": email,"access_token": access_token})
 
+
+@app.route('/edit-user/<int:id>', methods=['PUT'])
+def edit_user(id):
+    user = User.query.get(id)
+    if user:
+        try:
+            data = request.get_json()
+            user.fname = data.get('fname', user.fname)
+            user.lname = data.get('lname', user.lname)
+            user.city = data.get('city', user.city)
+            user.login = data.get('login', user.login)
+            user.password = data.get('password', user.password)
+            user.device_qty = data.get('device_qty', user.device_qty)
+
+            db.session.commit()
+
+            return jsonify({"message": "User updated successfully"}), 200
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+    else:
+        return jsonify({"message": "User not found"}), 404
+
 @app.route('/delete-user/<int:id>', methods=['DELETE'])
 def delete_user(id):
     user = User.query.get(id)
@@ -132,10 +173,29 @@ def delete_user(id):
     if user is not None:
         db.session.delete(user)
         db.session.commit()
-        return jsonify({"message": "Organization deleted successfully!"}), 200
+        return jsonify({"message": "User deleted successfully!"}), 200
     else:
-        return jsonify({"message": "Organization not found"}), 404
+        return jsonify({"message": "User not found"}), 404
 
-    
+@app.route('/api/users', methods=['GET'])
+def get_users():
+    users = User.query.all()
+
+    user_list = []
+    for user in users:
+        user_data = {
+            'id': user.id,
+            'fname': user.fname,
+            'lname': user.lname,
+            'city': user.city,
+            'login': user.login,
+            'password': user.password,
+            'device_qty': user.device_qty
+        }
+
+        user_list.append(user_data)
+
+    return jsonify({'users': user_list})
+
 if __name__ == '__main__':
     app.run(debug=True, port=8000)
