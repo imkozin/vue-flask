@@ -72,22 +72,45 @@ def create_admin():
 
     return jsonify({'message': 'Admin profile created successfully'}), 201
 
-@app.route('/admin/login', methods=['POST'])
-def admin_login():
+@app.route('/login', methods=['POST'])
+def login():
     data = request.get_json()
     login = data.get('login')
     password = data.get('password')
 
     if not login or not password:
         return jsonify({'error': 'Both login and password are required'}), 400
-    
-    admin = Admin.query.filter_by(login=login).first()
 
+    # Check if the login belongs to a user
+    user = User.query.filter_by(login=login).first()
+    if user and check_password_hash(user.password, password):
+        access_token = create_access_token(identity=user.login)
+        return jsonify({'access_token': access_token, 'user_type': 'user'}), 200
+
+    # Check if the login belongs to an admin
+    admin = Admin.query.filter_by(login=login).first()
     if admin and check_password_hash(admin.password, password):
         access_token = create_access_token(identity=admin.id)
-        return jsonify(access_token=access_token), 200
-    else:
-        return jsonify({'error': 'Invalid login credentials'}), 401
+        return jsonify({'access_token': access_token, 'user_type': 'admin'}), 200
+
+    return jsonify({'error': 'Invalid login credentials'}), 401
+
+# @app.route('/admin/login', methods=['POST'])
+# def admin_login():
+#     data = request.get_json()
+#     login = data.get('login')
+#     password = data.get('password')
+
+#     if not login or not password:
+#         return jsonify({'error': 'Both login and password are required'}), 400
+    
+#     admin = Admin.query.filter_by(login=login).first()
+
+#     if admin and check_password_hash(admin.password, password):
+#         access_token = create_access_token(identity=admin.id)
+#         return jsonify(access_token=access_token), 200
+#     else:
+#         return jsonify({'error': 'Invalid login credentials'}), 401
 
 @app.route('/user/register', methods=['POST'])
 def user_register():
@@ -125,24 +148,24 @@ def user_register():
     db.session.add(new_user)
     db.session.commit()
 
-    return jsonify({"message": "User registered successfully"}), 200
+    return jsonify({"message": "User registered successfully"}), 201
 
 
-@app.route('/user/login', methods=['POST'])
-def user_login():
-    data = request.get_json()
-    user = User.query.filter_by(email=data['email']).first() 
-    print("Req data =>", data)
-    print("DB query user", user)
+# @app.route('/user/login', methods=['POST'])
+# def user_login():
+#     data = request.get_json()
+#     user = User.query.filter_by(email=data['email']).first() 
+#     print("Req data =>", data)
+#     print("DB query user", user)
     
-    if user is None:
-        return jsonify({"error": "Unauthorized"}), 401
+#     if user is None:
+#         return jsonify({"error": "Unauthorized"}), 401
 
-    if not check_password_hash(user.password, data['password']):
-        return jsonify({"error": "Invalid credentials!"}), 401
-    access_token = create_access_token(identity=user.email)  
-    email = user.email
-    return jsonify({"email": email,"access_token": access_token})
+#     if not check_password_hash(user.password, data['password']):
+#         return jsonify({"error": "Invalid credentials!"}), 401
+#     access_token = create_access_token(identity=user.email)  
+#     email = user.email
+#     return jsonify({"email": email,"access_token": access_token})
 
 
 @app.route('/edit-user/<int:id>', methods=['PUT'])
