@@ -81,13 +81,11 @@ def login():
     if not login or not password:
         return jsonify({'error': 'Both login and password are required'}), 400
 
-    # Check if the login belongs to a user
     user = User.query.filter_by(login=login).first()
     if user and check_password_hash(user.password, password):
         access_token = create_access_token(identity=user.login)
         return jsonify({'access_token': access_token, 'user_type': 'user'}), 200
 
-    # Check if the login belongs to an admin
     admin = Admin.query.filter_by(login=login).first()
     if admin and check_password_hash(admin.password, password):
         access_token = create_access_token(identity=admin.id)
@@ -131,10 +129,10 @@ def user_register():
         return jsonify({'error': 'User with this login already exists'}), 400
 
     if not re.fullmatch(regex, data['login']):
-        return jsonify({"error": "Invalid Login"}), 400
+        return jsonify({"error": "Login should be a valid Email address"}), 400
     
     if len(data['password']) < 6:
-        return jsonify({"error": "Invalid Password"}), 400
+        return jsonify({"error": "Password is too short"}), 400
     
     hash_password = generate_password_hash(password)
     new_user = User(
@@ -185,7 +183,7 @@ def edit_user(id):
 
             return jsonify({"message": "User updated successfully"}), 200
         except Exception as e:
-            return jsonify({"error": str(e)}), 500
+            return jsonify({"error": "Login should be unique"}), 500
     else:
         return jsonify({"message": "User not found"}), 404
 

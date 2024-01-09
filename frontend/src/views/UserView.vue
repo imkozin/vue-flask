@@ -147,6 +147,7 @@
 </template>
 
 <script>
+import {authMixin} from '@/mixins/authMixin';
 import axios from 'axios';
 
     export default {
@@ -162,16 +163,32 @@ import axios from 'axios';
                     login: '',
                     city: '',
                     device_qty: '',
-                }
+                }      
             }
         },
+        mixins: [authMixin],
         mounted(){
             console.log('DOM mounted')
+            document.title = 'Profile Page'
         },
         created() {
             this.getUsers();
         },
         methods: {
+            successMessage(variant = null, message) {
+                this.$bvToast.toast(message, {
+                title: `Success`,
+                variant: variant,
+                solid: true
+                })
+            },
+            errorMessage(variant = null, error) {
+                this.$bvToast.toast(error, {
+                title: `Error`,
+                variant: variant,
+                solid: true
+                })
+            },
             async getUsers() {
                 try {
                     const response = await axios.get('http://localhost:8000/api/users');
@@ -187,14 +204,16 @@ import axios from 'axios';
                     const response = await axios.post('http://localhost:8000/user/register', this.currentUser, {
                         headers: {
                             'Content-Type': 'application/json',
-                        },
+                        }
                     });
-
                     const data = response.data;
                     console.log('User registered successfully:', data.message);
+                    this.successMessage('success', data.message)
                     this.getUsers();
                     this.isEditForm = false;
                 } catch (error) {
+                    const { data } = error.response;
+                    this.errorMessage('danger', data.error)
                     console.error('Error creating user:', error);
                 }
             },
@@ -208,11 +227,13 @@ import axios from 'axios';
             async editUser(id) {
                 try {
                     const response = await axios.put(`http://localhost:8000/edit-user/${id}`, this.currentUser);
-                    console.log('User updated successfully:', response.data);
                     this.currentUser = {};
                     this.getUsers();
+                    this.successMessage('success', response.data.message)
                     this.isEditForm = false;
                 } catch (error) {
+                    const { data } = error.response;
+                    this.errorMessage('danger', data.error)
                     console.error('Error updating user:', error);
                 }
             },
@@ -220,6 +241,7 @@ import axios from 'axios';
                 try {
                     const res = await axios.delete(`http://localhost:8000/delete-user/${id}`);
                     this.getUsers();
+                    this.successMessage('success', res.data.message)
                     console.log('User deleted successfully');
                 } catch (err) {
                     console.error('Error deleting user:', err.message);
