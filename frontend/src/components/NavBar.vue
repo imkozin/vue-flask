@@ -3,11 +3,11 @@
       <div>
         | <router-link to="/">Home</router-link> |
       </div>
-      <div v-if="isAuthenticated">
+      <div>
         <router-link to="/profile">Profile</router-link> |
-        <router-link @click="logout" to="/login">Log Out</router-link>
+        <a class="link" @click="logout">Log Out</a>
       </div>
-      <div v-else>
+      <div>
         <router-link to="/login">Sign In</router-link> |
         <router-link to="/register">Sign Up</router-link>
       </div>
@@ -22,14 +22,11 @@ export default {
         name: "NavBar",
         mixins: [authMixin],
         methods: {
-            logout() {
-              this.isAuthenticated = false
-              sessionStorage.removeItem('userType')
+          logout() {
+              sessionStorage.removeItem('authData');
+              this.$router.push('/login')
           },
         },
-        mounted() {
-          console.log('auth', this.isAuthenticated);
-        }
     }
 </script>
 
@@ -46,7 +43,16 @@ nav a {
   color: #2c3e50;
 }
 
-nav a.router-link-exact-active {
+nav a.router-link-exact-active  {
   color: #06100c;
+}
+
+.link {
+  color: #06100c;
+  cursor: pointer;
+}
+
+.link:hover {
+  text-decoration: underline;
 }
 </style>

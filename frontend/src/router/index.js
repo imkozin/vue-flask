@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import HomeView from '@/views/HomeView'
 import LoginView from '@/views/LoginView'
 import RegView from '@/views/RegView'
 import UserView from '@/views/UserView'
@@ -8,6 +9,11 @@ import PageNotFound from '@/views/PageNotFound'
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    path: '/',
+    name: 'home',
+    component: HomeView
+  },
   {
     path: '/login',
     name: 'login',
@@ -22,7 +28,7 @@ const routes = [
     path: '/profile',
     name: 'profile',
     component: UserView,
-    meta: { requiresAuth: true}
+    meta: { requiresAuth: true },
   },
   {
     path: '/:pathMatch(.*)*',

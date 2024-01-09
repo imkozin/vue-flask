@@ -89,8 +89,8 @@ export default {
         try {
             const response = await axios.post('http://localhost:8000/login', this.form);
             if (response.status === 200) {
-                const { access_token, user_type } = response.data;
-                sessionStorage.setItem('authData', JSON.stringify({ type: user_type, token: access_token }));
+                const { access_token, user_type, login } = response.data;
+                sessionStorage.setItem('authData', JSON.stringify({ type: user_type, token: access_token, login: login }));
                 // this.setAuthenticated();
                 this.$router.push('/profile');
             } else {

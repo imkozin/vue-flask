@@ -1,8 +1,45 @@
 <template>
     <div class="container-fluid">
         <div v-if="!isAdmin">
-            <h2 class="alert alert-danger mt-2">User Personal Information</h2>
+    <h2 class="alert alert-danger mt-2">User Personal Information</h2>
+    <div class="container mt-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="font-weight-bold">First Name:</label>
+                    <p>{{ user.fname }}</p>
+                </div>
+                <div class="col-md-4">
+                    <label class="font-weight-bold">Last Name:</label>
+                    <p>{{ user.lname }}</p>
+                </div>
+                <div class="col-md-4">
+                    <label class="font-weight-bold">City:</label>
+                    <p>{{ user.city }}</p>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-4">
+                    <label class="font-weight-bold">Login (Email)</label>
+                    <p>{{ user.login }}</p>
+                </div>
+                <div class="col-md-4">
+                    <label class="font-weight-bold">Password</label>
+                    <p>{{ '••••••' }}</p>
+                </div>
+                <div class="col-md-4">
+                    <label class="font-weight-bold">Device Quantity:</label>
+                    <p>
+                        <button class="btn btn-info mr-2" @click="decreaseDeviceQty" :disabled="user.device_qty === 0">-</button>
+                        {{ user.device_qty }}
+                        <button class="btn btn-primary ml-2" @click="increaseDeviceQty">+</button>
+                    </p>
+
+                </div>
+            </div>
         </div>
+    </div>
+
         <div v-else class="row mt-3">
             <div class="col-md-7">
                 <h2 class="alert alert-success">List of Users</h2>
@@ -155,6 +192,7 @@ import axios from 'axios';
         data() {
             return {
                 users: [],
+                user: [],
                 currentUser: {},
                 isEditForm: false,
                 user: {
@@ -172,10 +210,35 @@ import axios from 'axios';
             console.log('DOM mounted')
             document.title = 'Profile Page'
         },
+        beforeMount() {
+            this.getUser()
+        },
         created() {
             this.getUsers();
         },
         methods: {
+            decreaseDeviceQty() {
+                this.updateDeviceQty(this.user.device_qty - 1);
+            },
+            increaseDeviceQty() {
+                this.updateDeviceQty(this.user.device_qty + 1);
+            },
+            async updateDeviceQty(newQty) {
+                try {
+                    const response = await axios.put(
+                    `http://localhost:8000/edit-user-device/${this.user.id}`,
+                    { device_qty: newQty },
+                    { headers: { 'Content-Type': 'application/json' } } 
+                    );
+                    this.user.device_qty = newQty;
+                    this.getUser();
+                    this.successMessage('success', response.data.message);
+                } catch (error) {
+                    const { data } = error.response;
+                    this.errorMessage('danger', data.error);
+                    console.error('Error updating user:', error);
+                }
+            },
             successMessage(variant = null, message) {
                 this.$bvToast.toast(message, {
                 title: `Success`,
@@ -190,12 +253,24 @@ import axios from 'axios';
                 solid: true
                 })
             },
-            async getUsers() {
+            async getUsers() {        
                 try {
                     const response = await axios.get('http://localhost:8000/api/users');
                     const data = response.data;
                     this.users = data.users
                     console.log('users', this.users);
+                } catch (error) {
+                    console.error('Error fetching users:', error);
+                }
+            },
+            async getUser() {
+                const authData = JSON.parse(sessionStorage.getItem('authData'))
+                const login = authData.login
+                try {
+                    const response = await axios.get(`http://localhost:8000/get-user/${login}`);
+                    const data = response.data;
+                    this.user = data.user
+                    console.log('user', this.user);
                 } catch (error) {
                     console.error('Error fetching users:', error);
                 }

@@ -84,7 +84,7 @@ def login():
     user = User.query.filter_by(login=login).first()
     if user and check_password_hash(user.password, password):
         access_token = create_access_token(identity=user.login)
-        return jsonify({'access_token': access_token, 'user_type': 'user'}), 200
+        return jsonify({'access_token': access_token, 'user_type': 'user', 'login': login}), 200
 
     admin = Admin.query.filter_by(login=login).first()
     if admin and check_password_hash(admin.password, password):
@@ -121,7 +121,7 @@ def user_register():
     device_qty = data.get('device_qty')
 
     if not fname or not lname or not city or not login or not password:
-        return jsonify({'error': 'All fields (fname, lname, city, login, password) are required'}), 400
+        return jsonify({'error': 'All fields are required'}), 400
 
     user_exists = User.query.filter_by(login=data['login']).first()
 
@@ -165,6 +165,23 @@ def user_register():
 #     email = user.email
 #     return jsonify({"email": email,"access_token": access_token})
 
+@app.route('/edit-user-device/<int:id>', methods=['PUT'])
+def edit_device(id):
+    user = User.query.get(id)
+    
+    if user is not None:
+        data = request.get_json()
+        new_device_qty = data.get('device_qty')
+
+        if new_device_qty is not None:
+            user.device_qty = new_device_qty
+            db.session.commit()
+            return jsonify({"message": "Device quantity updated successfully"}), 200
+        else:
+            return jsonify({"error": "Invalid device quantity"}), 400
+    else:
+        return jsonify({"error": "User not found"}), 404
+
 
 @app.route('/edit-user/<int:id>', methods=['PUT'])
 def edit_user(id):
@@ -176,8 +193,17 @@ def edit_user(id):
             user.lname = data.get('lname', user.lname)
             user.city = data.get('city', user.city)
             user.login = data.get('login', user.login)
-            user.password = data.get('password', user.password)
+            password = data.get('password', user.password)
             user.device_qty = data.get('device_qty', user.device_qty)
+            
+            if not re.fullmatch(regex, user.login):
+                return jsonify({"error": "Login should be a valid Email address"}), 400
+
+            if len(password) < 6:
+                return jsonify({"error": "Password is too short"}), 400
+            
+            hashed_password = generate_password_hash(password)
+            user.password = hashed_password
 
             db.session.commit()
 
@@ -197,6 +223,26 @@ def delete_user(id):
         return jsonify({"message": "User deleted successfully!"}), 200
     else:
         return jsonify({"message": "User not found"}), 404
+    
+
+@app.route('/get-user/<string:login>', methods=['GET'])
+def get_user_data(login):
+    user = User.query.filter_by(login=login).first()
+
+    if user is not None:
+        user_data = {
+            'id': user.id,
+            'fname': user.fname,
+            'lname': user.lname,
+            'city': user.city,
+            'login': user.login,
+            'password': user.password,
+            'device_qty': user.device_qty
+        }
+
+        return jsonify({'user': user_data})
+    else:
+        return jsonify({'error': 'User not found'}), 404
 
 @app.route('/api/users', methods=['GET'])
 def get_users():

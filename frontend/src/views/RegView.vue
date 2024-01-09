@@ -95,9 +95,9 @@ export default {
                     'Content-Type': 'application/json',
                 }
             });
-            const data = response.data;
-            console.log('User registered successfully:', data.message);
-            sessionStorage.setItem('authData', JSON.stringify({ type: user_type, token: access_token }));
+            const { access_token, user_type, login } = response.data;
+            console.log('User registered successfully:', response.data.message);
+            sessionStorage.setItem('authData', JSON.stringify({ type: user_type, token: access_token, login: login }));
             this.$router.push('/profile');
         } catch (error) {
             const { data } = error.response;
