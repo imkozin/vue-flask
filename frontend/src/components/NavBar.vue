@@ -3,11 +3,11 @@
       <div>
         | <router-link to="/">Home</router-link> |
       </div>
-      <div>
+      <div v-if="isAuthenticated">
         <router-link to="/profile">Profile</router-link> |
         <a class="link" @click="logout">Log Out</a>
       </div>
-      <div>
+      <div v-else>
         <router-link to="/login">Sign In</router-link> |
         <router-link to="/register">Sign Up</router-link>
       </div>
@@ -23,8 +23,10 @@ export default {
         mixins: [authMixin],
         methods: {
           logout() {
-              sessionStorage.removeItem('authData');
-              this.$router.push('/login')
+            sessionStorage.removeItem('authData');
+            location.reload()
+            this.$router.push('/login')
+            console.log('params', this.$route.path);
           },
         },
     }

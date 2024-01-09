@@ -1,21 +1,12 @@
 export const authMixin = {
-//   data() {
-//     return {
-//       authData: ''
-//     }
-//   },
   computed: {
     isAdmin() {
-      const authDataString = sessionStorage.getItem('authData')
-      const authData = JSON.parse(authDataString)
-      console.log('data', authData)
-      return authData.type === 'admin'
+      const authData = JSON.parse(sessionStorage.getItem('authData'))
+      return authData && authData.type === 'admin'
     },
     isAuthenticated() {
-        const authDataString = sessionStorage.getItem('authData')
-        const authData = JSON.parse(authDataString)
-        console.log('data', authData)
-        return authData.token !== ''
-    }
+      const authData = JSON.parse(sessionStorage.getItem('authData'))
+      return authData && authData.token !== ''
+    },
   },
 }

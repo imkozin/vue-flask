@@ -62,6 +62,7 @@
 
 <script>
 import {authMixin} from '@/mixins/authMixin';
+import { toastMixin } from '@/mixins/toastMixin';
 import axios from 'axios';
 
 export default {
@@ -76,23 +77,16 @@ export default {
   mounted() {
     document.title = 'Sign In'
   },
-  mixins: [authMixin],
+  mixins: [authMixin, toastMixin],
   methods: {
-    authError(variant = null, error) {
-        this.$bvToast.toast(error, {
-          title: `Authentication Error`,
-          variant: variant,
-          solid: true
-        })
-    },
     async submitLogin() {
         try {
             const response = await axios.post('http://localhost:8000/login', this.form);
             if (response.status === 200) {
                 const { access_token, user_type, login } = response.data;
                 sessionStorage.setItem('authData', JSON.stringify({ type: user_type, token: access_token, login: login }));
-                // this.setAuthenticated();
                 this.$router.push('/profile');
+                location.reload()
             } else {
                 this.authError('danger', 'An error occurred');
             }

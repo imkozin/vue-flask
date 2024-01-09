@@ -62,6 +62,7 @@
 <script>
 import axios from 'axios';
 import { authMixin } from '@/mixins/authMixin';
+import {toastMixin} from '@/mixins/toastMixin'
 
 export default {
   data() {
@@ -76,18 +77,11 @@ export default {
       },
     };
   },
-  mixins: [authMixin],
+  mixins: [authMixin, toastMixin],
   mounted() {
     document.title = 'Sign Up'
   },
   methods: {
-    errorMessage(variant = null, error) {
-        this.$bvToast.toast(error, {
-        title: `Error`,
-        variant: variant,
-        solid: true
-        })
-    },
     async submitReg() {
       try {
             const response = await axios.post('http://localhost:8000/user/register', this.currentUser, {
@@ -99,6 +93,7 @@ export default {
             console.log('User registered successfully:', response.data.message);
             sessionStorage.setItem('authData', JSON.stringify({ type: user_type, token: access_token, login: login }));
             this.$router.push('/profile');
+            location.reload()
         } catch (error) {
             const { data } = error.response;
             this.errorMessage('danger', data.error)

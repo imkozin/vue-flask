@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <div v-if="!isAdmin">
-    <h2 class="alert alert-danger mt-2">User Personal Information</h2>
+    <h2 class="alert alert-info mt-2">User Personal Information</h2>
     <div class="container mt-4">
             <div class="row">
                 <div class="col-md-4">
@@ -186,6 +186,7 @@
 
 <script>
 import {authMixin} from '@/mixins/authMixin';
+import { toastMixin } from '@/mixins/toastMixin';
 import axios from 'axios';
 
     export default {
@@ -205,7 +206,7 @@ import axios from 'axios';
                 }      
             }
         },
-        mixins: [authMixin],
+        mixins: [authMixin, toastMixin],
         mounted(){
             console.log('DOM mounted')
             document.title = 'Profile Page'
@@ -238,20 +239,6 @@ import axios from 'axios';
                     this.errorMessage('danger', data.error);
                     console.error('Error updating user:', error);
                 }
-            },
-            successMessage(variant = null, message) {
-                this.$bvToast.toast(message, {
-                title: `Success`,
-                variant: variant,
-                solid: true
-                })
-            },
-            errorMessage(variant = null, error) {
-                this.$bvToast.toast(error, {
-                title: `Error`,
-                variant: variant,
-                solid: true
-                })
             },
             async getUsers() {        
                 try {

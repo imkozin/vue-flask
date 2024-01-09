@@ -9,17 +9,14 @@ from dotenv import load_dotenv
 import os
 import re
 
-# Load environment variables from .env file
 load_dotenv()
 
-# create the app
 app = Flask(__name__)
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['JWT_SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
 
-# this variable, db, will be used for all SQLAlchemy commands
 db = SQLAlchemy(app)
 
 @app.route('/test_db_connection')
