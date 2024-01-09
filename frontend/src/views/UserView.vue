@@ -1,7 +1,9 @@
 <template>
-    <div class="container-fluid"> 
-        <h2 class="alert alert-danger mt-2">User Personal Information</h2>
-        <div class="row">
+    <div class="container-fluid">
+        <div v-if="!isAdmin">
+            <h2 class="alert alert-danger mt-2">User Personal Information</h2>
+        </div>
+        <div v-else class="row mt-3">
             <div class="col-md-7">
                 <h2 class="alert alert-success">List of Users</h2>
                 <table class="table table-bordered mt-4">
@@ -33,7 +35,6 @@
             </div>
 
             <div class="col-md-5">
-                <!-- <div v-if="Object.keys(this.currentUser).length !== 0"> -->
                 <div v-if="isEditForm">
                     <h2 class="alert alert-warning">Edit User Details</h2>
                     <form @submit.prevent="editUser(currentUser.id)">

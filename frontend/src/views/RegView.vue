@@ -61,6 +61,7 @@
 
 <script>
 import axios from 'axios';
+import { authMixin } from '@/mixins/authMixin';
 
 export default {
   data() {
@@ -75,6 +76,7 @@ export default {
       },
     };
   },
+  mixins: [authMixin],
   mounted() {
     document.title = 'Sign Up'
   },
@@ -95,6 +97,7 @@ export default {
             });
             const data = response.data;
             console.log('User registered successfully:', data.message);
+            sessionStorage.setItem('authData', JSON.stringify({ type: user_type, token: access_token }));
             this.$router.push('/profile');
         } catch (error) {
             const { data } = error.response;

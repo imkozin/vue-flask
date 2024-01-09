@@ -91,6 +91,7 @@ export default {
             if (response.status === 200) {
                 const { access_token, user_type } = response.data;
                 sessionStorage.setItem('authData', JSON.stringify({ type: user_type, token: access_token }));
+                // this.setAuthenticated();
                 this.$router.push('/profile');
             } else {
                 this.authError('danger', 'An error occurred');

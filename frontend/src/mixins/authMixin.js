@@ -1,4 +1,9 @@
 export const authMixin = {
+//   data() {
+//     return {
+//       authData: ''
+//     }
+//   },
   computed: {
     isAdmin() {
       const authDataString = sessionStorage.getItem('authData')
@@ -7,4 +12,9 @@ export const authMixin = {
       return authData.type === 'admin'
     },
   },
+//   methods: {
+//     setAuthenticated() {
+//       this.isAuthenticated = true
+//     },
+//   },
 }
