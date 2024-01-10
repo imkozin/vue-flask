@@ -31,7 +31,7 @@
             <p>{{ '••••••' }}</p>
           </div>
           <div class="col-md-6 mb-3">
-            <label class="font-weight-bold">Device Quantity:</label>
+            <label class="font-weight-bold">Device Qty:</label>
             <p>
               <button class="btn btn-info mr-2" @click="decreaseDeviceQty" :disabled="user.device_qty === 0">-</button>
               {{ user.device_qty }}
@@ -54,7 +54,7 @@
               <th scope="col">Login (Email)</th>
               <th scope="col">Password</th>
               <th scope="col">City</th>
-              <th scope="col">Device Quantity</th>
+              <th scope="col">Device Qty</th>
               <th scope="col">Actions</th>
             </tr>
           </thead>
@@ -120,7 +120,7 @@
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Device Quantity</label>
+                        <label class="col-sm-2 col-form-label">Device Qty</label>
                         <div class="col-sm-10">
                         <input type="number" class="form-control" v-model="currentUser.device_qty" min="0">
                         </div>
@@ -173,7 +173,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Device Quatity</label>
+                            <label class="col-sm-2 col-form-label">Device Qty</label>
                             <div class="col-sm-10">
                                 <input type="number" class="form-control" v-model="currentUser.device_qty" min="0">
                             </div>

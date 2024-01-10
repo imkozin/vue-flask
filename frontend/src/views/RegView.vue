@@ -45,7 +45,7 @@
 
         <div class="col">
           <div class="form-group">
-            <label class="form-label float-left ml-2" min="0">Device Quantity</label>
+            <label class="form-label float-left ml-2" min="0">Device Qty</label>
             <input type="number" class="form-control" v-model="currentUser.device_qty">
           </div>
         </div>
@@ -96,7 +96,7 @@ export default {
             const { access_token, user_type, login } = response.data;
             console.log('User registered successfully:', response.data.message);
             sessionStorage.setItem('authData', JSON.stringify({ type: user_type, token: access_token, login: login }));
-            this.$router.push('/profile');
+            this.$router.push('/login');
             location.reload()
         } catch (error) {
             const { data } = error.response;
