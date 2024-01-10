@@ -8,7 +8,7 @@
         id="input-1"
         v-model="form.login"
         type="text"
-        placeholder="Enter login:"
+        placeholder="Enter login"
         required
       ></b-form-input>
     </b-form-group>

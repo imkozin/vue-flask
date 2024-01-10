@@ -2,7 +2,10 @@
   <div class="container">
     <h1>Welcome to User State Manager</h1>
     <p>Explore new way of data managing on our website</p>
-    <router-link to="/login" class="btn btn-primary">Login</router-link>
+    <div class="d-flex justify-content-center">
+      <router-link to="/login" class="btn btn-primary mr-2">Login</router-link>
+      <router-link to="/register" class="btn btn-primary ml-2">Register</router-link>
+    </div>
   </div>
 </template>
 
