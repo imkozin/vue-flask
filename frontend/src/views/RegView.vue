@@ -88,7 +88,7 @@ export default {
   methods: {
     async submitReg() {
       try {
-            const response = await axios.post('https://flask-server-6kzx.onrender.com/api/user/register', this.currentUser, {
+            const response = await axios.post('https://flask-server-two.vercel.app/api/user/register', this.currentUser, {
                 headers: {
                     'Content-Type': 'application/json',
                 }

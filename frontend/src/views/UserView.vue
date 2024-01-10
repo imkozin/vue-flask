@@ -234,7 +234,7 @@ import axios from 'axios';
             async updateDeviceQty(newQty) {
                 try {
                     const response = await axios.put(
-                    `https://flask-server-6kzx.onrender.com/api/edit-user-device/${this.user.id}`,
+                    `https://flask-server-two.vercel.app/api/edit-user-device/${this.user.id}`,
                     { device_qty: newQty },
                     { headers: { 'Content-Type': 'application/json' } } 
                     );
@@ -249,7 +249,7 @@ import axios from 'axios';
             },
             async getUsers() {        
                 try {
-                    const response = await axios.get('https://flask-server-6kzx.onrender.com/api/users');
+                    const response = await axios.get('https://flask-server-two.vercel.app/api/users');
                     const data = response.data;
                     this.users = data.users
                     console.log('users', this.users);
@@ -261,7 +261,7 @@ import axios from 'axios';
                 const authData = JSON.parse(sessionStorage.getItem('authData'))
                 const login = authData.login
                 try {
-                    const response = await axios.get(`https://flask-server-6kzx.onrender.com/api/get-user/${login}`);
+                    const response = await axios.get(`https://flask-server-two.vercel.app/api/get-user/${login}`);
                     const data = response.data;
                     this.user = data.user
                     console.log('user', this.user);
@@ -271,7 +271,7 @@ import axios from 'axios';
             },
             async createUser() {
                 try {
-                    const response = await axios.post('https://flask-server-6kzx.onrender.com/api/user/register', this.currentUser, {
+                    const response = await axios.post('https://flask-server-two.vercel.app/api/user/register', this.currentUser, {
                         headers: {
                             'Content-Type': 'application/json',
                         }
@@ -304,7 +304,7 @@ import axios from 'axios';
             },
             async editUser(id) {
                 try {
-                    const response = await axios.put(`https://flask-server-6kzx.onrender.com/api/edit-user/${id}`, this.currentUser);
+                    const response = await axios.put(`https://flask-server-two.vercel.app/api/edit-user/${id}`, this.currentUser);
                     this.currentUser = {};
                     this.getUsers();
                     this.successMessage('success', response.data.message)
@@ -317,7 +317,7 @@ import axios from 'axios';
             },
             async deleteUser(id) {
                 try {
-                    const res = await axios.delete(`https://flask-server-6kzx.onrender.com/api/delete-user/${id}`);
+                    const res = await axios.delete(`https://flask-server-two.vercel.app/api/delete-user/${id}`);
                     this.getUsers();
                     this.successMessage('success', res.data.message)
                     console.log('User deleted successfully');
