@@ -53,7 +53,11 @@
 
       <p>Already a member? <router-link to="/login" class="text-success">Sign in here</router-link></p>
 
-      <button type="submit" class="btn btn-success float-left ml-2">Register</button>
+      <div class="row">
+        <div class="col">
+          <button type="submit" class="btn btn-success btn-block">Register</button>
+        </div>
+      </div>
     </b-form>
   </div>
 </template>
