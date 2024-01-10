@@ -131,7 +131,7 @@ def user_register():
     if len(data['password']) < 6:
         return jsonify({"error": "Password is too short, minimum 6 symbols"}), 400
     
-    if device_qty < 0:
+    if data['device_qty'] < 0:
         return jsonify({'error': 'Device quantity must be at least 0'}), 400
     
     hash_password = generate_password_hash(password)
