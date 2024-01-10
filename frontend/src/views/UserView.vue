@@ -122,7 +122,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Device Quantity</label>
                         <div class="col-sm-10">
-                        <input type="number" class="form-control" v-model="currentUser.device_qty">
+                        <input type="number" class="form-control" v-model="currentUser.device_qty" min="0">
                         </div>
                     </div>
 
@@ -173,10 +173,10 @@
                         </div>
 
                         <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Device Quatity</label>
-                        <div class="col-sm-10">
-                            <input type="number" class="form-control" v-model="currentUser.device_qty">
-                        </div>
+                            <label class="col-sm-2 col-form-label">Device Quatity</label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control" v-model="currentUser.device_qty" min="0">
+                            </div>
                         </div>
 
                         <div class="form-group row">
