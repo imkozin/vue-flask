@@ -129,7 +129,7 @@ def user_register():
         return jsonify({"error": "Login should be a valid Email address"}), 400
     
     if len(data['password']) < 6:
-        return jsonify({"error": "Password is too short,"}), 400
+        return jsonify({"error": "Password is too short, minimum 6 symbols"}), 400
     
     if device_qty < 0:
         return jsonify({'error': 'Device quantity must be at least 0'}), 400
