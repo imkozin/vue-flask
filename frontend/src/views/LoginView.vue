@@ -81,7 +81,7 @@ export default {
   methods: {
     async submitLogin() {
         try {
-            const response = await axios.post('http://localhost:8000/login', this.form);
+            const response = await axios.post('https://flask-server-two.vercel.app/login', this.form);
             if (response.status === 200) {
                 const { access_token, user_type, login } = response.data;
                 sessionStorage.setItem('authData', JSON.stringify({ type: user_type, token: access_token, login: login }));

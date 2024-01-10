@@ -234,7 +234,7 @@ import axios from 'axios';
             async updateDeviceQty(newQty) {
                 try {
                     const response = await axios.put(
-                    `http://localhost:8000/edit-user-device/${this.user.id}`,
+                    `https://flask-server-two.vercel.app/edit-user-device/${this.user.id}`,
                     { device_qty: newQty },
                     { headers: { 'Content-Type': 'application/json' } } 
                     );
@@ -249,7 +249,7 @@ import axios from 'axios';
             },
             async getUsers() {        
                 try {
-                    const response = await axios.get('http://localhost:8000/api/users');
+                    const response = await axios.get('https://flask-server-two.vercel.app/api/users');
                     const data = response.data;
                     this.users = data.users
                     console.log('users', this.users);
@@ -261,7 +261,7 @@ import axios from 'axios';
                 const authData = JSON.parse(sessionStorage.getItem('authData'))
                 const login = authData.login
                 try {
-                    const response = await axios.get(`http://localhost:8000/get-user/${login}`);
+                    const response = await axios.get(`https://flask-server-two.vercel.app/get-user/${login}`);
                     const data = response.data;
                     this.user = data.user
                     console.log('user', this.user);
@@ -271,7 +271,7 @@ import axios from 'axios';
             },
             async createUser() {
                 try {
-                    const response = await axios.post('http://localhost:8000/user/register', this.currentUser, {
+                    const response = await axios.post('https://flask-server-two.vercel.app/user/register', this.currentUser, {
                         headers: {
                             'Content-Type': 'application/json',
                         }
@@ -296,7 +296,7 @@ import axios from 'axios';
             },
             async editUser(id) {
                 try {
-                    const response = await axios.put(`http://localhost:8000/edit-user/${id}`, this.currentUser);
+                    const response = await axios.put(`https://flask-server-two.vercel.app/edit-user/${id}`, this.currentUser);
                     this.currentUser = {};
                     this.getUsers();
                     this.successMessage('success', response.data.message)
@@ -309,7 +309,7 @@ import axios from 'axios';
             },
             async deleteUser(id) {
                 try {
-                    const res = await axios.delete(`http://localhost:8000/delete-user/${id}`);
+                    const res = await axios.delete(`https://flask-server-two.vercel.app/delete-user/${id}`);
                     this.getUsers();
                     this.successMessage('success', res.data.message)
                     console.log('User deleted successfully');
