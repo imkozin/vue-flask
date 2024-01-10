@@ -89,7 +89,7 @@ To get started, follow these steps:
 git clone https://github.com/imkozin/vue-flask.git
 ```
 - Navigate to the project directory:
-   - cd vue-flask
+   - cd backend
    - Running the Backend
    - Create a Virtual Environment (Optional): It's recommended to create a virtual environment to isolate your project dependencies. You can do this using the venv module that comes with Python. Open your terminal and run: python -m venv venv
 
