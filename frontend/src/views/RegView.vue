@@ -97,7 +97,7 @@ export default {
             console.log('User registered successfully:', response.data.message);
             sessionStorage.setItem('authData', JSON.stringify({ type: user_type, token: access_token, login: login }));
             this.$router.push('/login');
-            location.reload()
+            // location.reload()
         } catch (error) {
             const { data } = error.response;
             this.errorMessage('danger', data.error)
