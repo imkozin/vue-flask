@@ -55,8 +55,8 @@ User State Managere is a full-stack web application built with Flask for the bac
     db = SQLAlchemy(app)
     ```
 
-    Replace DATABASE_URL with your variable name from .env file os.environ.get('*DATABASE_URL*') or you can give a direct link with your PostgreSQL connection details, including the username, password, host, port, and database name e.g. 
-    
+Replace DATABASE_URL with your variable name from .env file os.environ.get('*DATABASE_URL*') or you can give a direct link with your PostgreSQL connection details, including the username, password, host, port, and database name e.g. 
+
     ```
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://username:password@localhost:5432/your-database-name'
     ``` 
@@ -66,12 +66,10 @@ The frontend of the Flask-Vue-App is built using the popular JavaScript library 
    - ### Frontend Architecture
    The frontend of this project follows a component-based architecture, where the user interface is divided into modular components that can be reused and combined to build complex views. Here are some key components used in the frontend:
    - **Navbar:** The navigation bar component displayed at the top of the application. It provides navigation links and user authentication options.
-   - **Home:** The start page where users can create an account or sign in into existing account using their credentials.
+   - **Home:** The start page where users can sign in into existing account using their credentials.
    - **Login and Register:** The login and registration page where users can sign in or create new accounts.
-   - **Organization:** The organization page where users can create or delete organizations, and view organization details.
-   - **Team:** The team page where users can assign existing users to the organization or remove from the organization, and delete user accounts.
+   - **Profile Page:** The profile page which displays different information depending on user role. A Standard users can change their device quantity information and admins can edit user personal information, create or delete users accounts.
    - **PageNotFound:** This page ensures a smooth user experience. If an unauthenticated user attempts to access pages that are intended only for logged-in users, they will be automatically redirected to our "PageNotFound" page.
-   - **Footer**
 
 ## Getting Started
 ### Prerequisites
