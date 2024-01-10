@@ -120,9 +120,9 @@
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Devices</label>
+                        <label class="col-sm-2 col-form-label">Device Quantity</label>
                         <div class="col-sm-10">
-                        <input type="text" class="form-control" v-model="currentUser.device_qty">
+                        <input type="number" class="form-control" v-model="currentUser.device_qty">
                         </div>
                     </div>
 
@@ -173,9 +173,9 @@
                         </div>
 
                         <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Devices</label>
+                        <label class="col-sm-2 col-form-label">Device Quatity</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="currentUser.device_qty">
+                            <input type="number" class="form-control" v-model="currentUser.device_qty">
                         </div>
                         </div>
 
@@ -218,11 +218,11 @@ import axios from 'axios';
             console.log('DOM mounted')
             document.title = 'Profile Page'
         },
-        beforeMount() {
-            this.getUser()
-        },
         created() {
-            this.getUsers();
+            if (this.isAdmin) {
+                this.getUsers();
+            }
+            this.getUser()
         },
         methods: {
             decreaseDeviceQty() {
@@ -279,6 +279,14 @@ import axios from 'axios';
                     const data = response.data;
                     console.log('User registered successfully:', data.message);
                     this.successMessage('success', data.message)
+                    this.currentUser = {
+                        fname: '',
+                        lname: '',
+                        city: '',
+                        login: '',
+                        password: '',
+                        device_qty: '',
+                    };
                     this.getUsers();
                     this.isEditForm = false;
                 } catch (error) {

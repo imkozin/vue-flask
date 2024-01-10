@@ -6,6 +6,13 @@
   </div>
 </template>
 
+<script>
+export default {
+  mounted() {
+    document.title = 'Home Page'
+  },
+}
+</script>
 
 <style scoped>
 .container {
