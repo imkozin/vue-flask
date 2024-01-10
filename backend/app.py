@@ -12,7 +12,7 @@ import re
 load_dotenv()
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/api/*": {"origins": "https://imkozin.github.io/vue-flask"}})
+cors = CORS(app, resources={r"/api/*": {"origins": "https://imkozin.github.io/vue-flask/frontend"}})
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['JWT_SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
