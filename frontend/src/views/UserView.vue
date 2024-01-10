@@ -209,7 +209,7 @@ import axios from 'axios';
                     password: '',
                     login: '',
                     city: '',
-                    device_qty: '',
+                    device_qty: 0,
                 }      
             }
         },

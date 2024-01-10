@@ -45,7 +45,7 @@
 
         <div class="col">
           <div class="form-group">
-            <label class="form-label float-left ml-2">Device Quantity</label>
+            <label class="form-label float-left ml-2" min="0">Device Quantity</label>
             <input type="number" class="form-control" v-model="currentUser.device_qty">
           </div>
         </div>
@@ -77,7 +77,7 @@ export default {
         city: '',
         login: '',
         password: '',
-        device_qty: '',
+        device_qty: 0,
       },
     };
   },
