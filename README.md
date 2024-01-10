@@ -39,6 +39,7 @@ User State Managere is a full-stack web application built with Flask for the bac
    The backend of this project uses a PostgreSQL relational database to store and manage user and organization data. PostgreSQL is a powerful, open-source relational database system known for its reliability and performance. You can find the database connection information in the app.py file.
    - ### Database Configuration
    To connect to the PostgreSQL database, update the database connection details in the Flask application configuration. The database connection is configured in the app.py file. The application uses the SQLAlchemy library to interact with the database. Here's an example of the database configuration:
+
     ```
     from flask import Flask
     from flask_sqlalchemy import SQLAlchemy
@@ -53,7 +54,9 @@ User State Managere is a full-stack web application built with Flask for the bac
     # this variable, db, will be used for all SQLAlchemy commands
     db = SQLAlchemy(app)
     ```
+
     Replace DATABASE_URL with your variable name from .env file os.environ.get('*DATABASE_URL*') or you can give a direct link with your PostgreSQL connection details, including the username, password, host, port, and database name e.g. 
+    
     ```
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://username:password@localhost:5432/your-database-name'
     ``` 
