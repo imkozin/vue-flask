@@ -45,8 +45,8 @@
 
         <div class="col">
           <div class="form-group">
-            <label class="form-label float-left ml-2" min="0">Device Qty</label>
-            <input type="number" class="form-control" v-model="currentUser.device_qty">
+            <label class="form-label float-left ml-2">Device Qty</label>
+            <input type="number" class="form-control" v-model="currentUser.device_qty" min="0">
           </div>
         </div>
       </div>
