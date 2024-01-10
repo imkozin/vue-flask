@@ -12,7 +12,7 @@ import re
 load_dotenv()
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/api/*": {"origins": "https://imkozin.github.io/vue-flask/frontend"}})
+CORS(app, resources={r"/api/*": {"origins": "https://imkozin.github.io"}})
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['JWT_SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
@@ -69,7 +69,7 @@ def create_admin():
 
     return jsonify({'message': 'Admin profile created successfully'}), 201
 
-@app.route('/login', methods=['POST'])
+@app.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
     login = data.get('login')
@@ -107,7 +107,7 @@ def login():
 #     else:
 #         return jsonify({'error': 'Invalid login credentials'}), 401
 
-@app.route('/user/register', methods=['POST'])
+@app.route('/api/user/register', methods=['POST'])
 def user_register():
     data = request.get_json()
     fname = data.get('fname')
@@ -162,7 +162,7 @@ def user_register():
 #     email = user.email
 #     return jsonify({"email": email,"access_token": access_token})
 
-@app.route('/edit-user-device/<int:id>', methods=['PUT'])
+@app.route('/api/edit-user-device/<int:id>', methods=['PUT'])
 def edit_device(id):
     user = User.query.get(id)
     
@@ -180,7 +180,7 @@ def edit_device(id):
         return jsonify({"error": "User not found"}), 404
 
 
-@app.route('/edit-user/<int:id>', methods=['PUT'])
+@app.route('/api/edit-user/<int:id>', methods=['PUT'])
 def edit_user(id):
     user = User.query.get(id)
     if user:
@@ -210,7 +210,7 @@ def edit_user(id):
     else:
         return jsonify({"message": "User not found"}), 404
 
-@app.route('/delete-user/<int:id>', methods=['DELETE'])
+@app.route('/api/delete-user/<int:id>', methods=['DELETE'])
 def delete_user(id):
     user = User.query.get(id)
 
@@ -222,7 +222,7 @@ def delete_user(id):
         return jsonify({"message": "User not found"}), 404
     
 
-@app.route('/get-user/<string:login>', methods=['GET'])
+@app.route('/api/get-user/<string:login>', methods=['GET'])
 def get_user_data(login):
     user = User.query.filter_by(login=login).first()
 
